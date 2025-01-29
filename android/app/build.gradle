@@ -1,0 +1,74 @@
+plugins {
+    id "com.android.application"
+    id "com.google.gms.google-services" // Firebase-related configuration
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin" // Flutter plugin
+}
+
+android {
+    namespace = "com.example.weather_app" // Your app's package name
+    compileSdk = 34 // Use the latest stable version of the SDK
+
+    ndkVersion = "25.2.9519653" // Explicitly specify your NDK version (optional)
+
+    defaultConfig {
+        applicationId = "com.example.weather_app" // Make sure this matches your Firebase project
+        minSdkVersion 23 // Minimum version supported by your app and dependencies
+        targetSdkVersion 34 // Latest target SDK version
+        versionCode 1 // Increment for every release
+        versionName "1.0.0" // Update with every version release
+        multiDexEnabled true // Enable multidex if your app exceeds the 64k methods limit
+    }
+
+    signingConfigs {
+        signingConfigs {
+            debug {
+                storeFile file("${rootProject.projectDir}/debug.keystore")
+                storePassword "android"
+                keyAlias "androiddebugkey"
+                keyPassword "android"
+            }
+        }
+        release {
+            // Add your own release signing details here
+            storeFile file("${rootProject.projectDir}/key.jks") // Path to your production keystore file
+            storePassword "your-keystore-password" // Replace with your keystore password
+            keyAlias "your-key-alias" // Replace with your key alias
+            keyPassword "your-key-password" // Replace with your key password
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    flutter {
+        source = "../.."
+    }
+}
+
+apply plugin: 'com.google.gms.google-services'
+
+dependencies {
+    implementation 'androidx.window:window:1.3.0'
+    implementation 'androidx.window:window-java:1.3.0'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
+}
